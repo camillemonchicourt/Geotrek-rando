@@ -420,7 +420,7 @@ function mainmapSetup(map, app) {
         treksLayer.showOnly(matched);
     });
     treksLayer.on('data:loaded', function () {
-        treksLayer.showOnly(Rando.app.trekCollection);
+        treksLayer.showOnly(app.trekCollection.pluck("id"));
         map.fitBounds(treksLayer.getFullBounds());
     });
 
