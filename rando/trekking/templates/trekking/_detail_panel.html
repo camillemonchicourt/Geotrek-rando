@@ -237,7 +237,7 @@
                 <h5>{% trans "Sharing circuit" %}</h5>
                 <ul>
               {% endif %}
-              <li><a href="{% locale_url request.LANGUAGE_CODE "trekking:trek_detail" relationship.trek.slug %}">{{ relationship.trek.name }}</a></li>
+              <li><a class="pjax" href="{% locale_url request.LANGUAGE_CODE "trekking:trek_detail" relationship.trek.slug %}">{{ relationship.trek.name }}</a></li>
               {% if forloop.last %}</ul>{% endif %}
             {% endfor %}
           </div>
