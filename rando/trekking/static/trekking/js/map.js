@@ -413,7 +413,7 @@ function mainmapInit(map, djoptions) {
     // Filter
     //
     // Reset view on filter reset
-    $(window.trekFilter).on('reset', function (){
+    $(window).on('filters:clear', function (){
         map.fitFakeBounds(treksBounds);
     });
     // Filter layers
@@ -421,9 +421,7 @@ function mainmapInit(map, djoptions) {
         treksLayer.showOnly(matched);
     });
     treksLayer.on('data:loaded', function () {
-        if (window.trekFilter.matching.length > 0) {
-            treksLayer.showOnly(window.trekFilter.matching);
-        }
+        treksLayer.showOnly(Rando.app.trekCollection);
         map.fitBounds(treksLayer.getFullBounds());
     });
 

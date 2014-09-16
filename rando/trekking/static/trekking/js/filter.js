@@ -7,6 +7,10 @@ function TrekFilter()
 
     this.setup = function () {
 
+        $(window).on('filters:clear', function () {
+            self.clear();
+        });
+
         initSliderFromDOM('difficulty');
         initSliderFromDOM('duration');
         initSliderFromDOM('altitude');
@@ -83,7 +87,7 @@ function TrekFilter()
         self.matching = [];
         for(var i=0; i<self.treksList.length; i++) {
             var trek = self.treksList[i],
-                trekid = trek.id;
+                trekid = trek.get('id');
             if (self.match(trek)) {
                 self.matching.push(trekid);
             }
@@ -198,7 +202,7 @@ function TrekFilter()
 
     this.match = function(trek) {
         if (this._matchSlider(trek, 'duration', 'duration') &&
-            this._matchSlider(trek, 'difficulty', 'difficulty') &&
+            this._matchSlider(trek, 'difficulty', 'difficulty.id') &&
             this._matchSlider(trek, 'altitude', 'ascent') &&
             this._matchList(trek, 'theme', 'themes') &&
             this._matchList(trek, 'usage', 'usages') &&
@@ -211,7 +215,7 @@ function TrekFilter()
     };
 
     this._matchSlider = function (trek, category, property) {
-        var value = trek[property];
+        var value = trek.get(property);
 
         // Trek considered as matching if filter not set or if
         // property is empty.
@@ -257,9 +261,12 @@ function TrekFilter()
 
     this._matchList = function (trek, category, property) {
         // If trek has nothing defined about this property, it matches !
-        if (!trek[property]) {
+        if (!trek.get(property)) {
             return true;
         }
+
+        var values = (''+trek.get(property)).split(',');
+
         // List of selected values
         var list = [];
         for (var filter in self.state[category]) {
@@ -272,7 +279,6 @@ function TrekFilter()
             return true;
         }
         // If at least, one is among selected, then it matches !
-        values = (''+trek[property]).split(',');
         for (var i=0; i<values.length; i++) {
             var item = values[i];
             if ($.inArray(item, list) != -1) {
@@ -287,7 +293,7 @@ function TrekFilter()
         if (!searched) return true;
 
         var needle = searched.toLowerCase(),
-            haystack = trek.fulltext;
+            haystack = trek.get('fulltext');
         return (new RegExp(needle)).test(haystack);
     };
 }
